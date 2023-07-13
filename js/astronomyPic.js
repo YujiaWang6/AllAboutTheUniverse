@@ -4,6 +4,8 @@ function pageReady(){
     //Output blocks
     var apodOutput = document.getElementById("apod__apiOutput");
     var apodIntro = document.getElementById("apod__apiIntro");
+    var userDate = document.getElementById("userDate");
+    var dateBtn = document.getElementById("submitBtn");
 
     //Get date range
     var today = new Date();
@@ -14,14 +16,15 @@ function pageReady(){
 
     //Setting APOD key & url
     const apodKEY = "DEMO_KEY";
-    const apodUrl = "https://api.nasa.gov/planetary/apod?api_key="+apodKEY+"&date="+apodDate;
+    var apodUrl = "https://api.nasa.gov/planetary/apod?api_key="+apodKEY+"&date="+apodDate;
 
     //Connect API
     let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function(){
+    xhr.onreadystatechange = findApi;
+    function findApi(){
         if(xhr.status===200){
             if(xhr.readyState===4){
-                const data = xhr.response;
+                var data = xhr.response;
                 if(data.media_type === "image"){
                     apodOutput.innerHTML = "<img src='"+data.url+"' width='960'>";
                 }else if(data.media_type === "video"){
@@ -35,4 +38,18 @@ function pageReady(){
     xhr.open('GET',apodUrl);
     xhr.responseType = "json";
     xhr.send(null);
+
+    //recall the API after user chose the date
+    dateBtn.onclick = getUserDate;
+    function getUserDate(){
+        apodDate=userDate.value;
+        apodUrl = "https://api.nasa.gov/planetary/apod?api_key="+apodKEY+"&date="+apodDate;
+        xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = findApi;
+        xhr.open('GET',apodUrl);
+        xhr.responseType = "json";
+        xhr.send(null);
+    }
+
+
 }
