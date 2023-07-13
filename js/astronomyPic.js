@@ -7,12 +7,15 @@ function pageReady(){
     var userDate = document.getElementById("userDate");
     var dateBtn = document.getElementById("submitBtn");
 
+
     //Get date range
     var today = new Date();
     var date = today.getDate();
     var month = today.getMonth()+1;
     var year = today.getFullYear();
     var apodDate = year+"-"+month+"-"+date;
+
+    userDate.setAttribute('max',today.toISOString().split('T')[0]);
 
     //Setting APOD key & url
     const apodKEY = "DEMO_KEY";
